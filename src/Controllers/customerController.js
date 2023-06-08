@@ -1,6 +1,8 @@
 const customeModels =require('../Models/cutomerModel')
 const validator = require('validator')
-
+const jwt = require('jsonwebtoken')
+const { SECRETE_KEY } = require('../../config')
+const { isValidObjectId } = require('mongoose')
 
 // const customer=async (req,res)=>{
 //   try{ 
@@ -33,7 +35,7 @@ const validator = require('validator')
 const createCustomer = async (req, res) => {
     try {
         const { firstName, lastName, mobileNumber, DOB, address, emailID } = req.body
-        if (!firstName || !lastName || !mobileNumber || !DOB || !address || !emailID ) return res.status(400).send({ status: false, message: "Provide all required fields" })
+        if (!firstName || !lastName || !mobileNumber || !DOB || !address || !emailID ) return res.status(400).send({ status: false, message: "Provide all mandatory fields" })
         if (!validator.isEmail(emailID)) return res.status(400).send({ status: false, message: 'Email is invalid' })
         if(!validator.isDate(DOB)) return res.status(400).send({ status: false, message: 'DOB is not a valid date' })
         if (mobileNumber.length !== 10) return res.status(400).send({ status: false, message: 'Mobile number must be 10 digits long' })
@@ -80,8 +82,9 @@ const getCustomer = async (req, res) => {
 const DeleteCustomer = async (req, res) => {
     try {
         const customerId = req.params.customerId
+        if(!isValidObjectId(req.customerID)) return res.status(400).send({ status: false, message: 'Not Valid customer for deletion' })
         const customer = await customerModel.findOne({ _id: customerId, status: "ACTIVE" })
-        if (customerId != req.customerID) return res.status(400).send({ status: false, message: 'Unauthorized Customer for Delete' })
+        if (customerId != customer._id) return res.status(400).send({ status: false, message: 'Unauthorized Customer for Delete' })
         if (!customer) return res.status(404).send({ status: false, message: "Customer does not exist " })
         const deleteCustomer = await customerModel.findOneAndUpdate({ _id: customer, status: "ACTIVE" }, { $set: { status: "INACTIVE" } }, { new: true })
         res.status(200).send({ status: true, customer: deleteCustomer })

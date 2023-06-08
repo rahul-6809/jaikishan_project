@@ -16,4 +16,4 @@ app.use(express.urlencoded({ extended:true}))
 
     app.use('/',routers)
 
-    app.listen(PORT||4200 ,()=>{console.log("Express app running on Port" ,PORT ||3000)})
+    app.listen(PORT||4200 ,()=>{console.log("Express app running on Port" ,PORT ||4200)})

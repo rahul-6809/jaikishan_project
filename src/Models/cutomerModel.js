@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
-
+var uuid = require('uuid');
+const UUIDs4 = uuid.v4;
 
 const customerSchema = new mongoose.Schema({
     firstName: String,
@@ -25,7 +26,12 @@ const customerSchema = new mongoose.Schema({
         type: String,
         enum: ["ACTIVE", "INACTIVE"],
         default : "ACTIVE"
-    }
+    
+}, customerID : {
+    type : mongoose.Types.UUID,
+    unique : true,
+    default : UUIDs4
+}
 },{timestamps:true});
 
 module.exports=mongoose.model("Customer",customerSchema)

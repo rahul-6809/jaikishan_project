@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const ObjectId= mongoose.Schema.Types.ObjectId
+var UUID=mongoose.Types.UUID;
 
 
 const cardSchema = new mongoose.Schema({
@@ -16,7 +16,7 @@ const cardSchema = new mongoose.Schema({
     },
     vision : String,
     customerID : {
-        type : mongoose.Schema.Types.ObjectId,
+        type : UUID,
         ref : 'Customer'
     }
 },{timestamps:true});

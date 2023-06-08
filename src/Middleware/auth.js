@@ -5,9 +5,9 @@ const { SECRETE_KEY } = require('../../config')
 const authorizedCustomer = async (req, res, next) => {
     try {
         const token = req.headers['x-auth-token']
-        if(!token) return res.status(403).send({status : false, message : 'Provide token, it is mandatory'})
+        if(!token) return res.status(403).send({status : false, message : "Provide token, it's mandatory"})
         const decodedToken = jwt.verify(token, SECRETE_KEY)
-        if(!decodedToken) return res.status(403).send({status : false, message : 'token verification failed'})
+        if(!decodedToken) return res.status(403).send({status : false, message : "token not valid"})
         req.customerID = decodedToken.customerID
         next()
 
